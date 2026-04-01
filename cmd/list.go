@@ -29,7 +29,7 @@ Examples:
   soltty list --id           # Show entry IDs for deletion
   soltty list clients
   soltty list projects
-  soltty list projects -c Acme Corp`,
+  soltty list projects -c Acme`,
 	Run: runList,
 }
 

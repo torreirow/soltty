@@ -7,6 +7,7 @@ Command-line interface for Solidtime time tracking.
 ## Features
 
 - **Start/Stop timers** - Quick time tracking from the terminal
+- **Auto-stop on start** - Automatically prompts to stop running timer when starting a new one
 - **Add entries** - Create completed time entries with specific times
 - **Current timer** - See what's running
 - **List entries** - View recent time entries
@@ -19,7 +20,8 @@ Command-line interface for Solidtime time tracking.
 
 ## Installation
 
-### Option 1: Nix Flake (Recommended)
+<details>
+<summary><b>Option 1: Nix Flake (Recommended)</b></summary>
 
 ```bash
 # Run directly without installing
@@ -55,7 +57,10 @@ nix profile install github:torreirow/soltty
 }
 ```
 
-### Option 2: Go Build
+</details>
+
+<details>
+<summary><b>Option 2: Go Build</b></summary>
 
 ```bash
 # Clone the repository
@@ -70,11 +75,19 @@ go build -ldflags "-X github.com/torreirow/soltty/cmd.version=${VERSION}" -o sol
 go install
 ```
 
-### Option 3: Pre-built Binaries
+</details>
+
+<details>
+<summary><b>Option 3: Pre-built Binaries</b></summary>
 
 Download from [GitHub Releases](https://github.com/torreirow/soltty/releases)
 
+</details>
+
 ## Configuration
+
+<details>
+<summary><b>Setup config.json</b></summary>
 
 Create `~/.config/soltty/config.json`:
 
@@ -91,8 +104,10 @@ Create `~/.config/soltty/config.json`:
 - **api_token**: Generate in Solidtime → Settings → API Tokens
 - **workspace_id**: Found in Solidtime URL or organization settings
 - **base_url** (required): API endpoint URL
-  - For Acme Corp Cloud: `https://app.example.com/api/v1`
+  - Use your Solidtime instance URL (e.g., `https://app.example.com/api/v1`)
   - For self-hosted: use your instance URL
+
+</details>
 
 ## Usage
 
@@ -181,8 +196,8 @@ soltty list clients
 soltty list projects
 
 # Filter projects by client (partial match, case-insensitive)
-soltty list projects -c Acme Corp
-soltty list projects -c tech
+soltty list projects -c Acme
+soltty list projects -c acme
 soltty list projects --client "Customer Name"
 ```
 
@@ -213,7 +228,8 @@ The web URL is automatically derived from your configured API endpoint. For exam
 - If browser opening fails, the URL is displayed so you can manually copy it
 - Requires existing browser session for authentication (no automatic login yet)
 
-## Configuration Locations
+<details>
+<summary><b>Configuration Locations (Advanced)</b></summary>
 
 soltty searches for `config.json` in this order:
 
@@ -230,6 +246,8 @@ soltty searches for `config.json` in this order:
 ```
 
 Config location: If you have an existing config at `~/.config/solidtime/config.json`, it will continue to work. You can optionally move it to the new location `~/.config/soltty/config.json` to align with the tool name.
+
+</details>
 
 ## Time Formats
 
