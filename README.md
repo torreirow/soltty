@@ -7,13 +7,14 @@ Command-line interface for Solidtime time tracking.
 ## Features
 
 - **Start/Stop timers** - Quick time tracking from the terminal
-- **Auto-stop on start** - Automatically prompts to stop running timer when starting a new one
+- **Auto-stop on start** - Automatically prompts to stop running timer when starting a new one (`--yes` to skip)
 - **Continue timer** - Restart a timer using an existing entry as template (copies description and project)
+- **Toggle** - Play/pause in one command, designed for bar widgets (waybar, i3bar)
 - **Add entries** - Create completed time entries with specific times
-- **Current timer** - See what's running
-- **List entries** - View recent time entries with short IDs and project names
-- **List clients** - View all clients with project counts
-- **List projects** - View all projects with client information
+- **Current timer** - See what's running, with `--json` for machine-readable output
+- **List entries** - View recent time entries with short IDs and project names, with `--json` output
+- **List clients** - View all clients with project counts, with `--json` output
+- **List projects** - View all projects with client information, with `--json` output
 - **Delete entries** - Remove mistakes
 - **Web interface** - Open Solidtime in your browser with one command
 - **Project support** - Assign time to projects
@@ -136,6 +137,12 @@ Stop this timer and start a new one? [y/N]: y
 ✓ Timer started: "New task"
 ```
 
+Use `--yes / -y` to skip the prompt (for scripts and bar widgets):
+```bash
+soltty start --yes "New task"
+soltty start -y "New task" --project "TMCS-General"
+```
+
 This eliminates the need to manually run `soltty stop` before starting a new timer.
 
 ### Stop the timer
@@ -153,23 +160,51 @@ soltty continue 985d7cb2
 # Also accepts longer IDs or full UUID
 soltty continue 985d7cb2-cb20
 soltty continue 985d7cb2-cb20-40a4-ad9a-627ffa5cdc77
+
+# Skip confirmation when a timer is already running
+soltty continue --yes 985d7cb2
 ```
 
 **How it works:**
 - Use `soltty list` to see 8-character short IDs for your recent entries
 - Enter at least 6 characters of an entry ID
 - The tool will copy the description and project to a new timer
-- If a timer is already running, you'll be prompted to stop it first
+- If a timer is already running, you'll be prompted to stop it first (use `--yes` to skip)
 
 **Error handling:**
 - If ID not found, you'll get suggestions to use `soltty list --id`
 - If ID is ambiguous (matches multiple entries), you'll see all matches with details
 - Invalid format shows helpful examples
 
+### Toggle timer (play/pause)
+
+```bash
+# Stop if running, continue last entry if stopped
+soltty toggle
+
+# Stop if running, start a specific task if stopped and no previous entry
+soltty toggle --description "General. Tasks" --project "TMCS-General"
+```
+
+Designed for bar widgets and scripts — fully non-interactive.
+
 ### Show current timer
 
 ```bash
 soltty current
+
+# Machine-readable JSON output (for bar widgets and scripts)
+soltty current --json
+```
+
+**JSON output when running:**
+```json
+{"running":true,"id":"f1ad5503-...","description":"General. Tasks","project":"TMCS-General","elapsed":"2h 15m","start":"2026-06-25T10:32:00Z"}
+```
+
+**JSON output when stopped:**
+```json
+{"running":false}
 ```
 
 ### Check version
@@ -204,6 +239,10 @@ soltty list --limit 5
 
 # Show with full UUIDs (36 characters)
 soltty list --id
+
+# Machine-readable JSON output
+soltty list --json
+soltty list --json --limit 5
 ```
 
 **Output format:**
@@ -224,6 +263,9 @@ a1b2c3d4 | 2026-04-09 | 10:00 | 1h 30m   | No project     | Bug fix
 ```bash
 # Show all clients with project counts
 soltty list clients
+
+# Machine-readable JSON output
+soltty list clients --json
 ```
 
 ### List projects
@@ -236,6 +278,10 @@ soltty list projects
 soltty list projects -c Acme
 soltty list projects -c acme
 soltty list projects --client "Customer Name"
+
+# Machine-readable JSON output
+soltty list projects --json
+soltty list projects --json --client "TMCS"
 ```
 
 **Note**: Archived clients and projects are automatically hidden from listings.

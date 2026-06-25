@@ -13,6 +13,7 @@ import (
 var (
 	startProject string
 	startTime    string
+	startYes     bool
 )
 
 var startCmd = &cobra.Command{
@@ -32,6 +33,7 @@ Examples:
 func init() {
 	startCmd.Flags().StringVarP(&startProject, "project", "p", "", "Project name")
 	startCmd.Flags().StringVarP(&startTime, "time", "t", "", "Custom start time (ISO8601 or HH:MM)")
+	startCmd.Flags().BoolVarP(&startYes, "yes", "y", false, "Skip confirmation when a timer is already running")
 }
 
 func runStart(cmd *cobra.Command, args []string) {
@@ -54,33 +56,31 @@ func runStart(cmd *cobra.Command, args []string) {
 	if current != nil {
 		elapsed := formatElapsedTime(current.Start)
 		fmt.Printf("A timer is currently running: \"%s\" (started %s ago)\n", current.Description, elapsed)
-		fmt.Print("Stop this timer and start a new one? [y/N]: ")
 
-		// Read user input
-		reader := bufio.NewReader(os.Stdin)
-		input, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Println(formatError(fmt.Errorf("failed to read input: %w", err)))
-			os.Exit(2)
+		if !startYes {
+			fmt.Print("Stop this timer and start a new one? [y/N]: ")
+
+			reader := bufio.NewReader(os.Stdin)
+			input, err := reader.ReadString('\n')
+			if err != nil {
+				fmt.Println(formatError(fmt.Errorf("failed to read input: %w", err)))
+				os.Exit(2)
+			}
+
+			input = strings.TrimSpace(strings.ToLower(input))
+
+			if input != "y" && input != "yes" {
+				fmt.Println("Keeping current timer running. No new timer started.")
+				os.Exit(0)
+			}
 		}
 
-		// Parse input (trim whitespace and convert to lowercase)
-		input = strings.TrimSpace(strings.ToLower(input))
-
-		// Check if user confirmed (accept 'y' or 'yes')
-		if input != "y" && input != "yes" {
-			fmt.Println("Keeping current timer running. No new timer started.")
-			os.Exit(0)
-		}
-
-		// Stop the current timer
 		stoppedEntry, err := c.StopTimeEntry(current.ID)
 		if err != nil {
 			fmt.Println(formatError(fmt.Errorf("failed to stop current timer: %w", err)))
 			os.Exit(2)
 		}
 
-		// Display confirmation of stopped timer
 		duration := formatDuration(stoppedEntry.Duration)
 		fmt.Printf("✓ Stopped: \"%s\" (duration: %s)\n", stoppedEntry.Description, duration)
 	}

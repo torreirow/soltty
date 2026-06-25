@@ -43,6 +43,7 @@ func init() {
 	rootCmd.AddCommand(listCmd)
 	rootCmd.AddCommand(deleteCmd)
 	rootCmd.AddCommand(continueCmd)
+	rootCmd.AddCommand(toggleCmd)
 	rootCmd.AddCommand(webCmd)
 }
 

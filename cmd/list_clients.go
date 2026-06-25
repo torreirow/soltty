@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"sort"
 
@@ -15,6 +16,12 @@ var listClientsCmd = &cobra.Command{
 	Run:   runListClients,
 }
 
+type listClientJSON struct {
+	ID           string `json:"id"`
+	Name         string `json:"name"`
+	ProjectCount int    `json:"project_count"`
+}
+
 func runListClients(cmd *cobra.Command, args []string) {
 	c, err := getClient()
 	if err != nil {
@@ -22,14 +29,12 @@ func runListClients(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	// Fetch clients
 	clients, err := c.GetClients()
 	if err != nil {
 		fmt.Println(formatError(fmt.Errorf("failed to fetch clients: %w", err)))
 		return
 	}
 
-	// Filter archived clients
 	var activeClients []client.SolidtimeClient
 	for _, cl := range clients {
 		if !cl.IsArchived {
@@ -37,20 +42,12 @@ func runListClients(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	// Check if empty
-	if len(activeClients) == 0 {
-		fmt.Println("No clients found")
-		return
-	}
-
-	// Fetch projects for counts
 	projects, err := c.GetProjects()
 	if err != nil {
 		fmt.Println(formatError(fmt.Errorf("failed to fetch projects: %w", err)))
 		return
 	}
 
-	// Count active projects per client
 	projectCounts := make(map[string]int)
 	for _, p := range projects {
 		if !p.IsArchived && p.ClientID != nil {
@@ -58,12 +55,33 @@ func runListClients(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	// Sort clients alphabetically
 	sort.Slice(activeClients, func(i, j int) bool {
 		return activeClients[i].Name < activeClients[j].Name
 	})
 
-	// Display clients with counts
+	if listJSON {
+		result := make([]listClientJSON, 0, len(activeClients))
+		for _, cl := range activeClients {
+			result = append(result, listClientJSON{
+				ID:           cl.ID,
+				Name:         cl.Name,
+				ProjectCount: projectCounts[cl.ID],
+			})
+		}
+		b, err := json.Marshal(result)
+		if err != nil {
+			fmt.Println(formatError(err))
+			return
+		}
+		fmt.Println(string(b))
+		return
+	}
+
+	if len(activeClients) == 0 {
+		fmt.Println("No clients found")
+		return
+	}
+
 	for _, cl := range activeClients {
 		count := projectCounts[cl.ID]
 		if count == 1 {

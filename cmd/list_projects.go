@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
@@ -20,6 +21,13 @@ var listProjectsCmd = &cobra.Command{
 	Run:   runListProjects,
 }
 
+type listProjectJSON struct {
+	ID       string  `json:"id"`
+	Name     string  `json:"name"`
+	ClientID *string `json:"client_id"`
+	Client   *string `json:"client"`
+}
+
 func init() {
 	listProjectsCmd.Flags().StringVarP(&listProjectsClientFilter, "client", "c", "", "Filter projects by client name (partial match)")
 }
@@ -31,27 +39,23 @@ func runListProjects(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	// Fetch clients for name lookup
 	clients, err := c.GetClients()
 	if err != nil {
 		fmt.Println(formatError(fmt.Errorf("failed to fetch clients: %w", err)))
 		return
 	}
 
-	// Build client ID -> name map
 	clientMap := make(map[string]string)
 	for _, cl := range clients {
 		clientMap[cl.ID] = cl.Name
 	}
 
-	// Fetch projects
 	projects, err := c.GetProjects()
 	if err != nil {
 		fmt.Println(formatError(fmt.Errorf("failed to fetch projects: %w", err)))
 		return
 	}
 
-	// Filter archived projects
 	var activeProjects []client.Project
 	for _, p := range projects {
 		if !p.IsArchived {
@@ -59,7 +63,6 @@ func runListProjects(cmd *cobra.Command, args []string) {
 		}
 	}
 
-	// Apply client filter if provided
 	if listProjectsClientFilter != "" {
 		var filteredProjects []client.Project
 		filterLower := strings.ToLower(listProjectsClientFilter)
@@ -75,19 +78,12 @@ func runListProjects(cmd *cobra.Command, args []string) {
 
 		activeProjects = filteredProjects
 
-		if len(activeProjects) == 0 {
+		if len(activeProjects) == 0 && !listJSON {
 			fmt.Printf("No projects found for client: %s\n", listProjectsClientFilter)
 			return
 		}
 	}
 
-	// Check if empty
-	if len(activeProjects) == 0 {
-		fmt.Println("No projects found")
-		return
-	}
-
-	// Sort by client name, then project name
 	sort.Slice(activeProjects, func(i, j int) bool {
 		clientNameI := "(no client)"
 		clientNameJ := "(no client)"
@@ -114,11 +110,38 @@ func runListProjects(cmd *cobra.Command, args []string) {
 		return activeProjects[i].Name < activeProjects[j].Name
 	})
 
-	// Display table header
+	if listJSON {
+		result := make([]listProjectJSON, 0, len(activeProjects))
+		for _, p := range activeProjects {
+			entry := listProjectJSON{
+				ID:       p.ID,
+				Name:     p.Name,
+				ClientID: p.ClientID,
+			}
+			if p.ClientID != nil {
+				if name, ok := clientMap[*p.ClientID]; ok {
+					entry.Client = &name
+				}
+			}
+			result = append(result, entry)
+		}
+		b, err := json.Marshal(result)
+		if err != nil {
+			fmt.Println(formatError(err))
+			return
+		}
+		fmt.Println(string(b))
+		return
+	}
+
+	if len(activeProjects) == 0 {
+		fmt.Println("No projects found")
+		return
+	}
+
 	fmt.Println("Client            | Project")
 	fmt.Println(strings.Repeat("-", 18) + "|" + strings.Repeat("-", 30))
 
-	// Display projects
 	for _, p := range activeProjects {
 		clientName := "(no client)"
 		if p.ClientID != nil {
