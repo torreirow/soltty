@@ -8,6 +8,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## NEXT VERSION
 
 ### Added
+- **JSON output**: Machine-readable `--json` flag for bar widgets and scripts
+  - `soltty current --json` — outputs timer state as JSON (`{"running":true,...}` or `{"running":false}`)
+  - `soltty list --json` — outputs time entries as a JSON array (full UUIDs, resolved project names, respects `--limit`)
+  - `soltty list clients --json` — outputs active clients with project counts as JSON array
+  - `soltty list projects --json` — outputs active projects with client info as JSON array (respects `--client` filter)
+- **Non-interactive `--yes` flag**: Skip the Y/N confirmation prompt on `start` and `continue`
+  - `soltty start --yes "Task"` — stops running timer immediately and starts the new one
+  - `soltty continue --yes <id>` — stops running timer immediately and continues the entry
+  - Existing interactive behaviour unchanged when `--yes` is not provided
+- **Toggle command**: New `soltty toggle` for bar widget play/pause integration
+  - Timer running → stops it
+  - Timer stopped, previous entry exists → continues the last entry
+  - Timer stopped, no entries, `--description` provided → starts a new timer
+  - Timer stopped, no entries, no description → exits 1 with an informative message
+  - Flags: `--description / -d`, `--project / -p` (used only when starting fresh)
 - **Continue command**: New `soltty continue <entry-id>` starts a timer using an existing entry as template
   - Copies description and project from any previous entry
   - Accepts short IDs (6-36 characters) or full UUID

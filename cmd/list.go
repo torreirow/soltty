@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 
@@ -10,6 +11,7 @@ import (
 var (
 	listLimit  int
 	listShowID bool
+	listJSON   bool
 )
 
 var listCmd = &cobra.Command{
@@ -27,15 +29,31 @@ Examples:
   soltty list
   soltty list --limit 5
   soltty list --id           # Show entry IDs for deletion
+  soltty list --json         # Machine-readable JSON output
   soltty list clients
+  soltty list clients --json
   soltty list projects
+  soltty list projects --json
   soltty list projects -c Acme`,
 	Run: runList,
+}
+
+type listEntryJSON struct {
+	ID          string  `json:"id"`
+	Description string  `json:"description"`
+	ProjectID   *string `json:"project_id"`
+	Project     *string `json:"project"`
+	Date        string  `json:"date"`
+	Start       string  `json:"start"`
+	End         *string `json:"end"`
+	Duration    int     `json:"duration"`
+	Running     bool    `json:"running"`
 }
 
 func init() {
 	listCmd.Flags().IntVarP(&listLimit, "limit", "l", 10, "Number of entries to show")
 	listCmd.Flags().BoolVar(&listShowID, "id", false, "Show entry IDs")
+	listCmd.PersistentFlags().BoolVar(&listJSON, "json", false, "Output as JSON")
 
 	// Register subcommands
 	listCmd.AddCommand(listClientsCmd)
@@ -55,11 +73,6 @@ func runList(cmd *cobra.Command, args []string) {
 		return
 	}
 
-	if len(entries) == 0 {
-		fmt.Println("No time entries found")
-		return
-	}
-
 	// Fetch projects for name lookup
 	projects, err := c.GetProjects()
 	if err != nil {
@@ -69,6 +82,43 @@ func runList(cmd *cobra.Command, args []string) {
 	projectMap := make(map[string]string)
 	for _, p := range projects {
 		projectMap[p.ID] = p.Name
+	}
+
+	if listJSON {
+		result := make([]listEntryJSON, 0, len(entries))
+		for _, entry := range entries {
+			e := listEntryJSON{
+				ID:          entry.ID,
+				Description: entry.Description,
+				ProjectID:   entry.ProjectID,
+				Date:        entry.Start.Local().Format("2006-01-02"),
+				Start:       entry.Start.UTC().Format("2006-01-02T15:04:05Z"),
+				Duration:    entry.Duration,
+				Running:     entry.End == nil,
+			}
+			if entry.ProjectID != nil {
+				if name, ok := projectMap[*entry.ProjectID]; ok {
+					e.Project = &name
+				}
+			}
+			if entry.End != nil {
+				s := entry.End.UTC().Format("2006-01-02T15:04:05Z")
+				e.End = &s
+			}
+			result = append(result, e)
+		}
+		b, err := json.Marshal(result)
+		if err != nil {
+			fmt.Println(formatError(err))
+			return
+		}
+		fmt.Println(string(b))
+		return
+	}
+
+	if len(entries) == 0 {
+		fmt.Println("No time entries found")
+		return
 	}
 
 	// Print header
@@ -86,7 +136,6 @@ func runList(cmd *cobra.Command, args []string) {
 		date := localStart.Format("2006-01-02")
 		startTime := localStart.Format("15:04")
 
-		// Check if timer is currently running (no end time)
 		var duration string
 		if entry.End == nil {
 			duration = "running"
@@ -94,7 +143,6 @@ func runList(cmd *cobra.Command, args []string) {
 			duration = formatDuration(entry.Duration)
 		}
 
-		// Get project name
 		projectName := "No project"
 		if entry.ProjectID != nil {
 			if name, ok := projectMap[*entry.ProjectID]; ok {
