@@ -1,11 +1,11 @@
 ---
 # soltty-ciky
 title: Non-interactive --yes flag for start and continue
-status: todo
+status: completed
 type: feature
 priority: high
 created_at: 2026-06-25T20:01:20Z
-updated_at: 2026-06-25T20:01:20Z
+updated_at: 2026-06-26T06:48:29Z
 ---
 
 Add a --yes / -y flag to 'start' and 'continue' commands to skip the Y/N confirmation

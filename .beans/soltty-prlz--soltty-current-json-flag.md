@@ -1,11 +1,11 @@
 ---
 # soltty-prlz
 title: soltty current --json flag
-status: todo
+status: completed
 type: feature
 priority: high
 created_at: 2026-06-25T20:01:11Z
-updated_at: 2026-06-25T20:01:11Z
+updated_at: 2026-06-26T06:48:29Z
 ---
 
 Add a --json flag to the 'current' command so output is machine-parseable.
