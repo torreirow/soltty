@@ -1,11 +1,11 @@
 ---
 # soltty-f23d
 title: soltty toggle command for bar widgets
-status: todo
+status: completed
 type: feature
 priority: normal
 created_at: 2026-06-25T20:01:29Z
-updated_at: 2026-06-25T20:01:29Z
+updated_at: 2026-06-26T06:48:29Z
 blocked_by:
     - soltty-ciky
 ---
