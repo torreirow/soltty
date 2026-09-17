@@ -219,9 +219,20 @@ RELEASE_DATE=$(date +"%d %b %Y" | sed 's/ 0/ /g')
 print_info "Updating CHANGELOG.md..."
 
 if [[ $CHANGELOG_CHOICE == "1" ]]; then
-    # Replace "## NEXT VERSION" with actual version and date
-    if grep -q "## NEXT VERSION" CHANGELOG.md; then
-        sed -i "s/## NEXT VERSION/## ${NEW_VERSION} - ${RELEASE_DATE}/" CHANGELOG.md
+    # Replace "## NEXT VERSION" with actual version and date.
+    # More than one such heading means unreleased sections were stacked; replacing
+    # them all would produce duplicate version headings, so refuse and let the
+    # author merge them into a single block first.
+    NEXT_COUNT=$(grep -c "^## NEXT VERSION" CHANGELOG.md || true)
+    if [[ $NEXT_COUNT -gt 1 ]]; then
+        print_error "Found ${NEXT_COUNT} '## NEXT VERSION' headings in CHANGELOG.md"
+        echo "Merge them into a single section before releasing, otherwise this"
+        echo "release would create ${NEXT_COUNT} identical '## ${NEW_VERSION}' headings."
+        grep -n "^## NEXT VERSION" CHANGELOG.md
+        exit 1
+    fi
+    if [[ $NEXT_COUNT -eq 1 ]]; then
+        sed -i "0,/^## NEXT VERSION/s//## ${NEW_VERSION} - ${RELEASE_DATE}/" CHANGELOG.md
         print_success "Updated CHANGELOG.md (replaced NEXT VERSION)"
     else
         # No NEXT VERSION found, add new section at top
