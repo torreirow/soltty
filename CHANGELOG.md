@@ -5,6 +5,15 @@ All notable changes to Soltty will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## NEXT VERSION
+
+### Removed
+- **README**: the "Releasing" section is gone
+  - It documented the maintainer release process in a user-facing README, and had
+    drifted from reality (it described zip archives for Windows; GoReleaser
+    produces tar.gz for every platform)
+  - `release.sh` remains the entry point and is self-documenting
+
 ## 0.5.1 - 17 Sep 2026
 
 ### Added
