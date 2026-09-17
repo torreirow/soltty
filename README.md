@@ -508,35 +508,6 @@ nix build
 5. **Update docs**: Keep README and CHANGELOG in sync
 6. **Mark complete**: Mark the change as complete in OpenSpec
 
-### Releasing
-
-Releases are automated via GitHub Actions and GoReleaser. To create a new release:
-
-**Prerequisites**: Nix must be installed for automated vendorHash updates when Go dependencies change.
-
-1. **Update version and changelog** (use `release.sh`):
-   ```bash
-   ./release.sh
-   ```
-   This will:
-   - Update VERSION and CHANGELOG.md
-   - Automatically update Nix flake vendorHash if Go dependencies changed
-   - Create a commit and tag
-
-2. **Push the tag** to trigger the release:
-   ```bash
-   git push origin v<version>
-   ```
-   Example: `git push origin v0.3.0`
-
-3. **Automated build**: GitHub Actions will automatically:
-   - Build binaries for Linux, macOS, and Windows (amd64 and arm64)
-   - Create archives (tar.gz for Unix, zip for Windows)
-   - Generate checksums
-   - Create a GitHub release with all artifacts attached
-
-The `release.sh` script is still useful for version management and changelog updates, but the binary building and GitHub release creation are now fully automated.
-
 ## Contributing
 
 Contributions are welcome! Please:
