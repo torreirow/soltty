@@ -1,5 +1,9 @@
 # Binaries
 soltty
+solty
+
+# Release artifacts
+dist/
 *.exe
 *.exe~
 *.dll

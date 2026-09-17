@@ -5,6 +5,28 @@ All notable changes to Soltty will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## NEXT VERSION
+
+### Added
+- **Third-party license notices**: `THIRD_PARTY_LICENSES/` now carries the license
+  text of every Go module linked into a release, and every release archive and the
+  Nix package ship it
+  - Regenerate or verify with `scripts/update-third-party-licenses.sh`
+  - CI fails if a linked module's license text is missing or out of date
+- **Unofficial-project disclaimer** and a trademark notice in the README, plus a
+  third-party attribution section listing each bundled module and its license
+- **SPDX headers**: every Go source file carries `SPDX-License-Identifier: MIT`
+
+### Changed
+- **Neutral example data**: client, project and workspace identifiers in the
+  documentation, examples and OpenSpec documents are now placeholders
+- **Project context**: `openspec/project.md` describes Soltty itself; it previously
+  documented an unrelated CSV export tool
+
+### Fixed
+- **`config.json.example`** was missing the required `base_url` field, so copying it
+  produced a config that failed to load
+
 ## 0.5.0 - 17 Sep 2026
 
 ### Changed

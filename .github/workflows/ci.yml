@@ -32,6 +32,9 @@ jobs:
             exit 1
           fi
 
+      - name: Check third-party license texts
+        run: scripts/update-third-party-licenses.sh --check
+
       - name: Vet
         run: go vet ./...
 

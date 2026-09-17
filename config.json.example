@@ -1,5 +1,6 @@
 {
   "username": "Your Name",
   "api_token": "your-solidtime-api-token-here",
-  "workspace_id": "your-workspace-uuid-here"
+  "workspace_id": "your-workspace-uuid-here",
+  "base_url": "https://app.example.com/api/v1"
 }

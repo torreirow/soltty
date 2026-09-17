@@ -4,6 +4,16 @@ Command-line interface for Solidtime time tracking.
 
 <img src="./images/soltty-logo.png">
 
+> **Unofficial project.** Soltty is an independent, community-built CLI. It is not
+> affiliated with, endorsed by, or sponsored by the Solidtime project or its
+> maintainers. "Solidtime" is used here only to describe what this tool talks to.
+>
+> Soltty communicates with Solidtime exclusively over its public HTTP REST API and
+> contains no Solidtime source code. Solidtime itself is a separate project,
+> licensed under AGPL-3.0: <https://github.com/solidtime-io/solidtime>
+>
+> For issues with Soltty, use this repository's issue tracker — not Solidtime's.
+
 ## Features
 
 - **Start/Stop timers** - Quick time tracking from the terminal
@@ -160,8 +170,8 @@ soltty stop
 soltty continue a1b2c3d4
 
 # Also accepts longer IDs or full UUID
-soltty continue a1b2c3d4-cb20
-soltty continue a1b2c3d4-cb20-40a4-ad9a-627ffa5cdc77
+soltty continue a1b2c3d4-e5f6
+soltty continue a1b2c3d4-e5f6-4789-abcd-ef0123456789
 
 # Skip confirmation when a timer is already running
 soltty continue --yes a1b2c3d4
@@ -248,12 +258,12 @@ soltty add "Deploy" --start "2026-09-16 23:00" --end "2026-09-17 01:00"
 
 `--start`, `--end` and `--time` accept these shapes:
 
-| Format                 | Example                    | Meaning                          |
-|------------------------|----------------------------|----------------------------------|
-| date, `T`, time, zone  | `2026-09-16T14:00:00Z`     | exact instant, timezone as given |
-| date, `T`, time        | `2026-09-16T14:00`         | local timezone                   |
-| date, space, time      | `2026-09-16 14:00`         | local timezone                   |
-| time only              | `14:00`                    | today, local timezone            |
+| Format                | Example                | Meaning                          |
+|-----------------------|------------------------|----------------------------------|
+| date, `T`, time, zone | `2026-09-16T14:00:00Z` | exact instant, timezone as given |
+| date, `T`, time       | `2026-09-16T14:00`     | local timezone                   |
+| date, space, time     | `2026-09-16 14:00`     | local timezone                   |
+| time only             | `14:00`                | today, local timezone            |
 
 - The date must be `YYYY-MM-DD`. Other notations (`16-09-2026`, `09/16/2026`)
   are rejected rather than guessed at.
@@ -543,3 +553,28 @@ Contributions are welcome! Please:
 MIT License - see [LICENSE](LICENSE) file for details.
 
 Copyright (c) 2026 Wouter van der Toorren
+
+### Third-party software
+
+Soltty is statically linked, so released binaries contain compiled code from the
+Go modules below. Their full license texts ship in every release archive under
+`THIRD_PARTY_LICENSES/`, and are in [that directory](THIRD_PARTY_LICENSES/) here.
+
+| Module                                 | License      | Shipped in          |
+|----------------------------------------|--------------|---------------------|
+| `github.com/pkg/browser`               | BSD-2-Clause | all builds          |
+| `github.com/spf13/cobra`               | Apache-2.0   | all builds          |
+| `github.com/spf13/pflag`               | BSD-3-Clause | all builds          |
+| `github.com/inconshreveable/mousetrap` | Apache-2.0   | Windows builds only |
+| `golang.org/x/sys`                     | BSD-3-Clause | Windows builds only |
+
+None of these is copyleft; all permit redistribution within an MIT-licensed work.
+Soltty does not modify any of them.
+
+### Trademarks
+
+"Solidtime" is a name used by the Solidtime project. It appears in this
+repository, in the tool's name and in its output for the sole purpose of
+identifying the service Soltty connects to. No claim of ownership, affiliation or
+endorsement is made or implied. All other names are the property of their
+respective owners.

@@ -56,8 +56,8 @@ The system SHALL support a `-c` or `--client` flag to filter projects by client 
 - **THEN** the system displays only projects where the client name is "Acme Corp"
 
 #### Scenario: Filter by partial client name
-- **WHEN** user runs `soltty list projects -c "Tech"`
-- **THEN** the system displays projects for all clients containing "Tech" (e.g., "Acme Corp", "FinTech")
+- **WHEN** user runs `soltty list projects -c "Ac"`
+- **THEN** the system displays projects for all clients containing "Ac" (e.g., "Acme Corp", "Acorn Ltd")
 
 #### Scenario: Filter is case-insensitive
 - **WHEN** user runs `soltty list projects -c "acme"`

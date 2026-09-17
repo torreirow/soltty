@@ -31,6 +31,14 @@
               "-X github.com/torreirow/soltty/cmd.version=${pkgs.lib.strings.trim version}"
             ];
 
+            # The binary statically links Apache-2.0 and BSD-licensed modules, whose
+            # license texts must be redistributed alongside it.
+            postInstall = ''
+              mkdir -p $out/share/doc/soltty
+              cp -r $src/THIRD_PARTY_LICENSES $out/share/doc/soltty/
+              cp $src/LICENSE $out/share/doc/soltty/
+            '';
+
             meta = with pkgs.lib; {
               description = "Command-line time tracking tool for Solidtime";
               homepage = "https://github.com/torreirow/soltty";

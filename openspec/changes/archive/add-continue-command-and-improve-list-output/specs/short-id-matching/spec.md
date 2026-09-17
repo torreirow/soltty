@@ -6,7 +6,7 @@ The system SHALL provide functionality to match time entries by UUID prefix (sho
 
 #### Scenario: Match by 8-character prefix
 - **WHEN** system searches for entry with short ID "a1b2c3d4"
-- **AND** an entry exists with UUID "a1b2c3d4-cb20-40a4-ad9a-627ffa5cdc77"
+- **AND** an entry exists with UUID "a1b2c3d4-e5f6-4789-abcd-ef0123456789"
 - **THEN** the system SHALL return that entry as a match
 
 #### Scenario: Match by 6-character prefix (minimum)
@@ -15,13 +15,13 @@ The system SHALL provide functionality to match time entries by UUID prefix (sho
 - **THEN** the system SHALL return that entry as a match
 
 #### Scenario: Match by full UUID
-- **WHEN** system searches for entry with full UUID "a1b2c3d4-cb20-40a4-ad9a-627ffa5cdc77"
+- **WHEN** system searches for entry with full UUID "a1b2c3d4-e5f6-4789-abcd-ef0123456789"
 - **AND** an entry exists with that exact UUID
 - **THEN** the system SHALL return that entry as a match
 
 #### Scenario: Case-insensitive matching
-- **WHEN** system searches for entry with short ID "985D7CB2"
-- **AND** an entry exists with UUID "a1b2c3d4-cb20-40a4-ad9a-627ffa5cdc77"
+- **WHEN** system searches for entry with short ID "A1B2C3D4"
+- **AND** an entry exists with UUID "a1b2c3d4-e5f6-4789-abcd-ef0123456789"
 - **THEN** the system SHALL return that entry as a match (case-insensitive comparison)
 
 #### Scenario: No matching entry
@@ -41,7 +41,7 @@ The system SHALL provide functionality to match time entries by UUID prefix (sho
 
 #### Scenario: Prefix matching only (not substring)
 - **WHEN** system searches for entry with short ID "7cb2"
-- **AND** an entry exists with UUID "a1b2c3d4-cb20-40a4-ad9a-627ffa5cdc77"
+- **AND** an entry exists with UUID "a1b2c3d4-e5f6-4789-abcd-ef0123456789"
 - **THEN** the system SHALL NOT match (must match from the beginning)
 
 #### Scenario: Validate ID format before searching
@@ -56,6 +56,6 @@ The system SHALL provide functionality to match time entries by UUID prefix (sho
 - **AND** SHALL NOT perform a search
 
 #### Scenario: Accept dashes in ID
-- **WHEN** system searches for entry with ID "a1b2c3d4-cb20"
-- **AND** an entry exists with UUID starting with "a1b2c3d4-cb20"
+- **WHEN** system searches for entry with ID "a1b2c3d4-e5f6"
+- **AND** an entry exists with UUID starting with "a1b2c3d4-e5f6"
 - **THEN** the system SHALL return that entry as a match (dashes are part of UUID format)

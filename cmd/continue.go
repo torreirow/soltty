@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Wouter van der Toorren
+
 package cmd
 
 import (
@@ -21,8 +24,8 @@ Use 'soltty list' to see 8-character short IDs for recent entries.
 
 Examples:
   soltty continue a1b2c3d4
-  soltty continue a1b2c3d4-cb20
-  soltty continue a1b2c3d4-cb20-40a4-ad9a-627ffa5cdc77`,
+  soltty continue a1b2c3d4-e5f6
+  soltty continue a1b2c3d4-e5f6-4789-abcd-ef0123456789`,
 	Args: cobra.ExactArgs(1),
 	Run:  runContinue,
 }

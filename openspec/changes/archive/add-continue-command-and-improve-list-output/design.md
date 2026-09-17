@@ -122,7 +122,7 @@ continue <short-id>
 2. **Ambiguous (multiple matches):**
    ```
    Error: Ambiguous ID '985d' matches multiple entries:
-   a1b2c3d4 - 2026-04-09 14:30: TNIIT-105 am-iris-prod-03
+     a1b2c3d4 - 2026-04-09 14:30: TNIIT-105 am-iris-prod-03
      985d1234 - 2026-04-08 10:00: Other task
 
    Please use more characters (e.g., 'a1b2c3d4')

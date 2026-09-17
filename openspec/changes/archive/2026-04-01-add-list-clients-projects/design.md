@@ -6,7 +6,7 @@ The Solidtime API provides:
 - `GET /organizations/{id}/clients` - returns clients with `id`, `name`, `is_archived` fields
 - `GET /organizations/{id}/projects` - returns projects with `id`, `name`, `client_id`, `is_archived` fields
 
-Current workspace has ~15 clients and ~46 projects. The largest client (Acme Corp) has 14 projects.
+A typical workspace has on the order of a dozen clients and a few dozen projects, with the largest client holding roughly a third of them.
 
 ## Goals / Non-Goals
 
@@ -131,10 +131,10 @@ for _, client := range clients {
 ```
 
 **Rationale:**
-- User-friendly: `-c tech` matches "Acme Corp"
+- User-friendly: `-c acme` matches "Acme Corp"
 - Avoids typos: case-insensitive
 - Simple implementation with standard library
-- Fast enough for ~15 clients
+- Fast enough for workspaces of this size
 
 **Alternatives considered:**
 - Exact match → Rejected: less user-friendly
@@ -158,8 +158,8 @@ Acorn Ltd (3 projects)
 ```
 Client            | Project
 ------------------|---------------------------
-Acme Corp        | Acme-General
-Acme Corp        | Acme-Meetings
+Acme Corp         | Acme-General
+Acme Corp         | Acme-Meetings
 ...
 ```
 
@@ -192,7 +192,7 @@ sort.Slice(clients, func(i, j int) bool {
 ## Risks / Trade-offs
 
 **Risk:** API returns many items, could slow down command
-- **Mitigation:** Current dataset is small (~15 clients, ~46 projects). If it grows, can add pagination later with `--limit` flag.
+- **Mitigation:** Typical workspaces hold at most a few dozen of each. If they grow, can add pagination later with `--limit` flag.
 
 **Risk:** Client filter might match multiple clients unexpectedly
 - **Mitigation:** Use partial match (contains), not prefix. User can be more specific if needed.

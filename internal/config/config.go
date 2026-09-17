@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT
+// Copyright (c) 2026 Wouter van der Toorren
+
 package config
 
 import (

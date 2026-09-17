@@ -13,7 +13,7 @@ The CLI tool SHALL provide a `continue` command to start a new timer based on an
 - **AND** display confirmation showing the copied description and project
 
 #### Scenario: Continue entry by full UUID
-- **WHEN** user runs `solidtime-cli continue a1b2c3d4-cb20-40a4-ad9a-627ffa5cdc77`
+- **WHEN** user runs `solidtime-cli continue a1b2c3d4-e5f6-4789-abcd-ef0123456789`
 - **AND** an entry with that UUID exists
 - **THEN** the CLI SHALL look up the entry
 - **AND** create a new time entry with the same description and project
