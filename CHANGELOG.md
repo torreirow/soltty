@@ -27,6 +27,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **`config.json.example`** was missing the required `base_url` field, so copying it
   produced a config that failed to load
 
+## NEXT VERSION
+
+### Removed
+- **Logo**: the project no longer ships a logo
+  - It rendered "SOLIDTIME" in its wordmark, which is branding use of another
+    project's name rather than descriptive reference
+  - The provenance of its photographic background was never recorded
+  - `logo-prompt.md` is kept as a brief for a future, clean replacement
+
 ## 0.5.0 - 17 Sep 2026
 
 ### Changed

@@ -2,8 +2,6 @@
 
 Command-line interface for Solidtime time tracking.
 
-<img src="./images/soltty-logo.png">
-
 > **Unofficial project.** Soltty is an independent, community-built CLI. It is not
 > affiliated with, endorsed by, or sponsored by the Solidtime project or its
 > maintainers. "Solidtime" is used here only to describe what this tool talks to.
