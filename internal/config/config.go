@@ -32,10 +32,10 @@ func Load() (*Config, error) {
 
 	// Search paths in priority order
 	searchPaths := []string{
-		filepath.Join(configDir, "soltty", "config.json"),        // Primary: ~/.config/soltty/config.json
-		filepath.Join(configDir, "solidtime", "config.json"),     // Fallback 1: ~/.config/solidtime/config.json (legacy)
-		filepath.Join(homeDir, ".solidtime", "config.json"),      // Fallback 2
-		filepath.Join(".", "config.json"),                        // Fallback 3
+		filepath.Join(configDir, "soltty", "config.json"),    // Primary: ~/.config/soltty/config.json
+		filepath.Join(configDir, "solidtime", "config.json"), // Fallback 1: ~/.config/solidtime/config.json (legacy)
+		filepath.Join(homeDir, ".solidtime", "config.json"),  // Fallback 2
+		filepath.Join(".", "config.json"),                    // Fallback 3
 	}
 
 	var lastErr error
