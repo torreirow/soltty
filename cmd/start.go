@@ -22,17 +22,23 @@ var startCmd = &cobra.Command{
 	Long: `Start a new time tracking entry.
 
 Examples:
-  solty start "Working on feature X"
-  solty start "Bug fix" --project "Example-Project"
-  solty start "Forgot to start" --time "09:00"
-  solty start "Task" --time "2026-03-31T08:00:00Z"`,
+  soltty start "Working on feature X"
+  soltty start "Bug fix" --project "Example-Project"
+  soltty start "Forgot to start" --time "09:00"
+  soltty start "Task" --time "2026-03-31T08:00:00Z"
+  soltty start "Backdated" --time "2026-09-16 09:00"
+
+Time formats: 2026-09-16T14:00:00Z, 2026-09-16 14:00 or 14:00. The date must be
+YYYY-MM-DD. The separator may be 'T' or a space, seconds are optional, and a
+timezone offset is only allowed after a 'T' separator. A bare time means today,
+local timezone.`,
 	Args: cobra.ExactArgs(1),
 	Run:  runStart,
 }
 
 func init() {
 	startCmd.Flags().StringVarP(&startProject, "project", "p", "", "Project name")
-	startCmd.Flags().StringVarP(&startTime, "time", "t", "", "Custom start time (ISO8601 or HH:MM)")
+	startCmd.Flags().StringVarP(&startTime, "time", "t", "", "Custom start time (see 'soltty start --help' for formats)")
 	startCmd.Flags().BoolVarP(&startYes, "yes", "y", false, "Skip confirmation when a timer is already running")
 }
 
@@ -99,12 +105,12 @@ func runStart(cmd *cobra.Command, args []string) {
 	// Parse custom start time if specified
 	var customStart *time.Time
 	if startTime != "" {
-		t, err := parseTime(startTime)
+		pt, err := parseTime(startTime)
 		if err != nil {
 			fmt.Println(formatError(err))
 			return
 		}
-		customStart = &t
+		customStart = &pt.Time
 	}
 
 	// Start the timer

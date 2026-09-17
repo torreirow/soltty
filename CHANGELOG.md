@@ -5,6 +5,27 @@ All notable changes to Soltty will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## NEXT VERSION
+
+### Changed
+- **Flexible time input**: `--start`, `--end` and `--time` now accept more formats
+  - `2026-09-16 14:00` and `2026-09-16T14:00` work alongside the full `2026-09-16T14:00:00Z`
+  - Seconds are optional in every format
+  - Input without a timezone is read as local time; input without a date means today
+  - The date must be `YYYY-MM-DD`; other notations are rejected instead of guessed at
+  - A timezone offset is only allowed after a `T` separator
+- **End time inherits the start date**: in `soltty add`, an `--end` without its own
+  date now belongs to the day of `--start` instead of defaulting to today
+  - The end date is never shifted forward, so an entry crossing midnight still
+    needs an explicit end date — this keeps a mistyped end time an error rather
+    than a 23-hour entry
+  - The error message now suggests the dated `--end` to use
+- **Date in confirmation**: `soltty add` shows `YYYY-MM-DD HH:MM` when the entry is
+  not on today's date, and `HH:MM` when it is
+
+### Fixed
+- **Help examples**: `soltty add` and `soltty start` examples said `solty`
+
 ## 0.4.0 - 25 Jun 2026
 
 ### Added

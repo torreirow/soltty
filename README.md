@@ -19,6 +19,7 @@ Command-line interface for Solidtime time tracking.
 - **Web interface** - Open Solidtime in your browser with one command
 - **Project support** - Assign time to projects
 - **Custom start times** - Backdate timers if you forgot to start
+- **Flexible time input** - `2026-09-16T14:00:00Z`, `2026-09-16 14:00` or `14:00` (today)
 - **Short ID matching** - Reference entries by 8-character short IDs (6-36 chars accepted)
 
 ## Installation
@@ -126,6 +127,7 @@ soltty start "Bug fix" --project "Customer-Project"
 # With custom start time (if you forgot to start)
 soltty start "Morning work" --time "09:00"
 soltty start "Task" --time "2026-03-31T08:00:00Z"
+soltty start "Backdated task" --time "2026-09-16 09:00"
 ```
 
 **Auto-stop feature**: If a timer is already running, `soltty start` will prompt you to stop it first:
@@ -218,15 +220,47 @@ soltty version
 ### Add completed entry
 
 ```bash
-# Add entry with specific times
+# Add entry with specific times (today)
 soltty add "Meeting" --start "14:00" --end "15:30"
 
 # With project
 soltty add "Sprint planning" --start "10:00" --end "12:00" --project "Meetings"
 
+# Backdated entry
+soltty add "Client call" --start "2026-09-16 09:00" --end "2026-09-16 17:00"
+
+# The end time inherits the date of the start time
+soltty add "Client call" --start "2026-09-16 09:00" --end "17:00"
+
 # Full ISO8601 timestamps
 soltty add "Client call" --start "2026-03-31T14:00:00Z" --end "2026-03-31T15:30:00Z"
 ```
+
+An `--end` without its own date belongs to the day of `--start`, never to today.
+The date is never shifted forward, so an entry crossing midnight needs an
+explicit end date:
+
+```bash
+soltty add "Deploy" --start "2026-09-16 23:00" --end "2026-09-17 01:00"
+```
+
+### Time formats
+
+`--start`, `--end` and `--time` accept these shapes:
+
+| Format                 | Example                    | Meaning                          |
+|------------------------|----------------------------|----------------------------------|
+| date, `T`, time, zone  | `2026-09-16T14:00:00Z`     | exact instant, timezone as given |
+| date, `T`, time        | `2026-09-16T14:00`         | local timezone                   |
+| date, space, time      | `2026-09-16 14:00`         | local timezone                   |
+| time only              | `14:00`                    | today, local timezone            |
+
+- The date must be `YYYY-MM-DD`. Other notations (`16-09-2026`, `09/16/2026`)
+  are rejected rather than guessed at.
+- Seconds are optional: `14:00` and `14:00:30` both work.
+- A timezone offset (`Z`, `+02:00`) is only allowed after a `T` separator.
+- Input without timezone information is read as **local** time.
+- Input without a date resolves to **today**.
 
 ### List recent entries
 
@@ -393,7 +427,7 @@ soltty stop
 
 ```bash
 # Add yesterday's meeting you forgot to track
-soltty add "Client meeting" --start "2026-03-30T14:00:00Z" --end "2026-03-30T15:30:00Z" --project "Customer-Project"
+soltty add "Client meeting" --start "2026-03-30 14:00" --end "15:30" --project "Customer-Project"
 ```
 
 **Fix mistakes:**
