@@ -1,5 +1,15 @@
 # Soltty Logo - Banana AI Prompt
 
+> **There is currently no logo.** The previous one was removed: it rendered
+> "SOLIDTIME" as part of the wordmark, which is branding use of another project's
+> name rather than plain descriptive reference, and the provenance of its
+> photographic background was never recorded — it matches none of the prompts
+> below, all of which describe a flat vector mark.
+>
+> If you make a new one, keep it to the prompts here: the wordmark is "soltty"
+> alone. Do not put "Solidtime" in the mark, and record where every visual asset
+> came from, with its licence.
+
 ## Primary Prompt (Recommended)
 
 ```
