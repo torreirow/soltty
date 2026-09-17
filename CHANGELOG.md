@@ -5,7 +5,7 @@ All notable changes to Soltty will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## NEXT VERSION
+## 0.5.1 - 17 Sep 2026
 
 ### Added
 - **Third-party license notices**: `THIRD_PARTY_LICENSES/` now carries the license
