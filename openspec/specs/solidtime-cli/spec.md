@@ -1,7 +1,10 @@
 # solidtime-cli Specification
 
 ## Purpose
-TBD - created by archiving change add-solidtime-cli. Update Purpose after archive.
+Gives Solidtime time tracking a command-line interface, so starting, stopping,
+adding, listing and deleting time entries happens from the terminal instead of
+the web app. Covers the commands themselves, how entries are addressed and
+displayed, and how local time is reconciled with the API's UTC timestamps.
 
 ## Requirements
 

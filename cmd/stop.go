@@ -12,7 +12,7 @@ var stopCmd = &cobra.Command{
 	Long: `Stop the currently running time entry.
 
 Example:
-  solty stop`,
+  soltty stop`,
 	Run: runStop,
 }
 

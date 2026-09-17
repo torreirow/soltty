@@ -14,8 +14,8 @@ var deleteCmd = &cobra.Command{
 Warning: This action cannot be undone.
 
 Example:
-  solty list --id                                    # Get entry IDs
-  solty delete 01234567-89ab-cdef-0123-456789abcdef  # Delete by ID`,
+  soltty list --id                                    # Get entry IDs
+  soltty delete 01234567-89ab-cdef-0123-456789abcdef  # Delete by ID`,
 	Args: cobra.ExactArgs(1),
 	Run:  runDelete,
 }
@@ -33,7 +33,7 @@ func runDelete(cmd *cobra.Command, args []string) {
 	err = c.DeleteTimeEntry(entryID)
 	if err != nil {
 		fmt.Println(formatError(err))
-		fmt.Println("\nTip: Use 'solty list --id' to see valid entry IDs")
+		fmt.Println("\nTip: Use 'soltty list --id' to see valid entry IDs")
 		return
 	}
 
